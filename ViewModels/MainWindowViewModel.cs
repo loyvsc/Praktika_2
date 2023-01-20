@@ -1,8 +1,10 @@
-﻿using Praktika_2.Tools;
+﻿using Microsoft.Win32;
+using Praktika_2.Tools;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace Praktika_2.ViewModels
@@ -18,13 +20,14 @@ namespace Praktika_2.ViewModels
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
-            if (FileCreatedOrOpened == true && FileSaved==false)
+            if (FileCreatedOrOpened == true && FileSaved == false)
             {
-                if (MessageBox.Show("Закрытие приложения", "Выйти из приложения бех сохранения?", MessageBoxButton.YesNo, MessageBoxImage.Warning)==MessageBoxResult.No)
+                if (MessageBox.Show("Выйти из приложения бех сохранения?", "Закрытие приложения", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
                 {
-
-                    return;
-                }                
+                    SaveFile(sender);
+                    e.Cancel = true;
+                }
+                else Tools.DB.DeleteBD();
             }
         }
 
@@ -33,7 +36,7 @@ namespace Praktika_2.ViewModels
             get => _items;
             set
             {
-                if (_items!= value)
+                if (_items != value)
                 {
                     _items = value;
                 }
@@ -44,7 +47,7 @@ namespace Praktika_2.ViewModels
         #region Properties
 
         private ObservableCollection<Models.Item> _items;
-        private event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
         private bool _fileCreated = false;
         public string ItemsCount
         {
@@ -83,7 +86,7 @@ namespace Praktika_2.ViewModels
         }
         public bool FileCreatedOrOpened
         {
-            get => _fileCreated;
+            get { return _fileCreated; }
             set
             {
                 _fileCreated = value;
@@ -95,18 +98,42 @@ namespace Praktika_2.ViewModels
         #region Commands
         public ICommand ADDItem { get { return new RelayCommand(AddItem); } }
         public ICommand CreateNewFile { get { return new RelayCommand(CreateFile); } }
+        public ICommand Savefile { get { return new RelayCommand(SaveFile); } }
         #endregion
 
         public void CreateFile(object obj)
         {
             Tools.DB.CreateBD();
             FileCreatedOrOpened = true;
-            MessageBox.Show("");
         }
 
         public void AddItem(object obj)
         {
             MessageBox.Show("добавление клиента");
+        }
+
+        public void SaveFile(object obj)
+        {
+            try
+            {
+                SaveFileDialog dialog = new SaveFileDialog()
+                {
+                    Filter = "Расходно-приходная накладная|*.rpnf",
+                    AddExtension = true,
+                    Title = "Сохранение наклодной"
+                };
+                if (dialog.ShowDialog() == true)
+                {
+                    File.Move(Tools.DB.Path, dialog.FileName);
+                    FileSaved = true;
+                    throw new System.Exception("Сохранено!");
+                }
+                else throw new System.Exception("Путь сохранения не выбран!");
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Сохранение наклодной", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         public void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

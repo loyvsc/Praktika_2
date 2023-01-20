@@ -13,7 +13,9 @@ namespace Praktika_2.Tools
         /// Путь к БД
         /// </summary>
         public static string Path { get; set; }
-
+        /// <summary>
+        /// Создание БД
+        /// </summary>
         public static void CreateBD()
         {
             Path = System.IO.Path.GetTempFileName();
@@ -28,7 +30,9 @@ namespace Praktika_2.Tools
                 connection.Close();
             }
         }
-
+        /// <summary>
+        /// Удаленние БД
+        /// </summary>
         public static void DeleteBD()
         {
             File.Delete(Path);

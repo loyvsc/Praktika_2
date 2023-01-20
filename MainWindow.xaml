@@ -53,7 +53,7 @@
             </StackPanel>
         </GroupBox>
         <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Items}" Grid.Row="0" Grid.RowSpan="4" Grid.Column="1"
-                  Margin="10,25,10,10">
+                  Margin="10,25,10,10" IsEnabled="{Binding FileCreatedOrOpened, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Наименование товара" Width="140" Binding="{Binding ItemName}"/>
                 <DataGridTextColumn Header="Код товара" Width="80" Binding="{Binding ItemCode}"/>
