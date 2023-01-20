@@ -1,0 +1,14 @@
+﻿<Application x:Class="Praktika_2.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <Style x:Name="Button" TargetType="Button">
+            <Setter Property="BorderBrush" Value="Black"/>
+        </Style>
+        <Style x:Name="GroupBox" TargetType="GroupBox">
+            <Setter Property="Background" Value="#F0F0F0"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+        </Style>
+    </Application.Resources>
+</Application>
