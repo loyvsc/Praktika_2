@@ -22,8 +22,8 @@
             <MenuItem Header="Файл">
                 <MenuItem Header="Новый" Command="{Binding CreateNewFile, Mode=OneWay}"/>
                 <MenuItem Header="Открыть"/>
-                <MenuItem Header="Сохранить" IsEnabled="{Binding FileCreatedOrOpened, UpdateSourceTrigger=PropertyChanged}"/>
-                <MenuItem Header="Экспорт в" IsEnabled="{Binding FileCreatedOrOpened, UpdateSourceTrigger=PropertyChanged}">
+                <MenuItem Header="Сохранить" IsEnabled="{Binding FileCreatedOrOpened}"/>
+                <MenuItem Header="Экспорт в" IsEnabled="{Binding FileCreatedOrOpened}">
                     <MenuItem Header="Excel"/>
                     <MenuItem Header="PDF"/>
                 </MenuItem>
@@ -36,13 +36,13 @@
         </Menu>
         <GroupBox Grid.Row="0" Grid.Column="0" Margin="5,16,0,0" Header="Действия" Grid.RowSpan="2">
             <StackPanel>
-                <Button Height="34" Width="120" Margin="0,5,0,0" VerticalAlignment="Top" IsEnabled="{Binding FileCreatedOrOpened, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" Command="{Binding ADDItem, Mode=OneWay}">
+                <Button Height="34" Width="120" Margin="0,5,0,0" VerticalAlignment="Top" IsEnabled="{Binding FileCreatedOrOpened}" Command="{Binding ADDItem, Mode=OneWay}">
                     <TextBlock TextAlignment="Center">Добавить сведения <LineBreak/> о товаре</TextBlock>
                 </Button>
-                <Button Height="34" Width="120" Margin="0,5,0,0" VerticalAlignment="Top" IsEnabled="{Binding FileCreatedOrOpened, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
+                <Button Height="34" Width="120" Margin="0,5,0,0" VerticalAlignment="Top" IsEnabled="{Binding FileCreatedOrOpened}">
                     <TextBlock TextAlignment="Center">Реактировать<LineBreak/>сведения о товаре</TextBlock>
                 </Button>
-                <Button Height="34" Width="120" Margin="0,5,0,0" VerticalAlignment="Top" IsEnabled="{Binding FileCreatedOrOpened, UpdateSourceTrigger=PropertyChanged}">
+                <Button Height="34" Width="120" Margin="0,5,0,0" VerticalAlignment="Top" IsEnabled="{Binding FileCreatedOrOpened}">
                     <TextBlock TextAlignment="Center">Удалить сведения <LineBreak/> о товаре</TextBlock>
                 </Button>
             </StackPanel>

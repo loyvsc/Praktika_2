@@ -22,7 +22,7 @@ namespace Praktika_2.ViewModels
         {
             if (FileCreatedOrOpened == true && FileSaved == false)
             {
-                if (MessageBox.Show("Выйти из приложения бех сохранения?", "Закрытие приложения", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                if (MessageBox.Show("Выйти из приложения без сохранения?", "Закрытие приложения", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
                 {
                     SaveFile(sender);
                     e.Cancel = true;
@@ -53,22 +53,36 @@ namespace Praktika_2.ViewModels
         {
             get
             {
-                if (FileCreatedOrOpened == false)
+                try
                 {
-                    return "Кол-во товаров: 0";
+                    if (FileCreatedOrOpened == false)
+                    {
+                        return "Кол-во товаров: 0";
+                    }
+                    return "Кол-во товаров: " + Items.Count;
                 }
-                return "Кол-во товаров: " + Items.Count;
+                finally
+                {
+                    OnPropertyChanged("ItemsCount");
+                }
             }
         }
         public string ItemsOtpushcheno
         {
             get
             {
-                if (FileCreatedOrOpened == false)
+                try
                 {
-                    return "Отпущено: 0\nОтмущено на сумму: 0";
+                    if (FileCreatedOrOpened == false)
+                    {
+                        return "Отпущено: 0\nОтмущено на сумму: 0";
+                    }
+                    return $"Отпущено: {OtpushchenoCount}\nОтмущено на сумму: 0";
                 }
-                return $"Отпущено: {OtpushchenoCount}\nОтмущено на сумму: 0";
+                finally
+                {
+                    OnPropertyChanged("ItemsOtpushcheno");
+                }
             }
         }
         public double OtpushchenoCount
@@ -136,6 +150,9 @@ namespace Praktika_2.ViewModels
             }
         }
 
-        public void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        public void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
