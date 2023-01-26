@@ -6,8 +6,8 @@ namespace Praktika_2
     {
         public MainWindow()
         {
-            InitializeComponent();
             DataContext = new ViewModels.MainWindowViewModel();
+            InitializeComponent();
         }
     }
 }

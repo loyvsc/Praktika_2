@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using System.Windows;
@@ -20,7 +21,7 @@ namespace Praktika_2.Tools
         {
             Path = System.IO.Path.GetTempFileName();
             SQLiteConnection.CreateFile(Path);
-            using (SQLiteConnection connection = new SQLiteConnection("Data Source = "+Path))
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source = " + Path))
             {
                 connection.Open();
                 using (SQLiteCommand Command = new SQLiteCommand("CREATE TABLE \"Items\" ( \"TovarName\" TEXT, \"TovarCode\" TEXT, \"Articul\" TEXT, \"Sort\" TEXT, \"Razmer\" TEXT, \"Polnota\" TEXT, \"Izmirenie_Name\" TEXT, \"OKEICode\" TEXT, \"Price\" REAL, \"OtpushchenoCount\" REAL, \"OtpushcenoPrice\" REAL, \"SdanoCount\" REAL, \"SdanoPrice\" REAL, \"SellSumm\" REAL );", connection))
@@ -38,9 +39,34 @@ namespace Praktika_2.Tools
             File.Delete(Path);
         }
 
+        public static void AddItem(Models.Item item)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection($"Data source = "+Path))
+            {
+                connection.Open();
+                using (SQLiteCommand insertSQL = new SQLiteCommand($"INSERT INTO Items (Name, Surname, Pathnetic," +
+                    $" Dolgnost, HourPay, Hours) VALUES" +
+                    $" (\"{Client.Name}\",\"{Client.SurName}\",\"{Client.Pathnetic}\"," +
+                    $"\"{Client.Dolgnost}\",:hourpay,{Client.Hours})", connection))
+                {
+                    try
+                    {
+                        insertSQL.Parameters.Add("hourpay", DbType.Double).Value = Client.HourPay;
+                        insertSQL.ExecuteNonQuery();
+                    }
+                    catch
+                    {
+                        MessageBox.Show("")
+                    }
+                }
+                connection.Close();
+            }
+        }
+
+
         public static ObservableCollection<Models.Item> GetClients(string Quary)
         {
-            using (SQLiteConnection connection = new SQLiteConnection($"Data Source = {Path}"))
+            using (SQLiteConnection connection = new SQLiteConnection($"Data Source = " + Path))
             {
                 try
                 {
@@ -75,13 +101,12 @@ namespace Praktika_2.Tools
                 }
                 catch
                 {
-                    MessageBox.Show("Файл повреждён!");
-                    Application.Current.Shutdown();
-                    return null;
+                    throw new Exception("Файл поврежден");
                 }
             }
         }
     }
+
 
     public class RelayCommand : ICommand
     {
@@ -108,6 +133,26 @@ namespace Praktika_2.Tools
         public void Execute(object parameter)
         {
             execute(parameter);
+        }
+    }
+
+    public static class FileCheck
+    {
+        public static string ValidFileName { get; set; } = null;
+
+        public static bool isFileNameValid(string fileName)
+        {
+            if ((fileName == null) || (fileName.IndexOfAny(Path.GetInvalidPathChars()) != -1))
+                return false;
+            try
+            {
+                new FileInfo(fileName);
+                return true;
+            }
+            catch (NotSupportedException)
+            {
+                return false;
+            }
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace Praktika_2
 {
@@ -13,5 +7,12 @@ namespace Praktika_2
     /// </summary>
     public partial class App : Application
     {
+        void App_Startup(object sender, StartupEventArgs e)
+        {
+            if (e.Args.Length == 1 && Tools.FileCheck.isFileNameValid(e.Args[0]))
+            {
+                Tools.FileCheck.ValidFileName = e.Args[0];
+            }
+        }
     }
 }
